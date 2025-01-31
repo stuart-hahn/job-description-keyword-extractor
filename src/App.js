@@ -4,22 +4,90 @@ function App() {
   const [text, setText] = useState("");
   const [wordCounts, setWordCounts] = useState([]);
 
+  // List of common stopwords to ignore
+  const stopwords = new Set([
+    "and",
+    "to",
+    "the",
+    "with",
+    "of",
+    "a",
+    "in",
+    "an",
+    "for",
+    "as",
+    "or",
+    "our",
+    "on",
+    "at",
+    "by",
+    "this",
+    "that",
+    "which",
+    "is",
+    "are",
+    "was",
+    "were",
+    "be",
+    "been",
+    "it",
+    "from",
+    "but",
+    "not",
+    "so",
+    "if",
+    "then",
+    "than",
+    "because",
+    "about",
+    "can",
+    "could",
+    "should",
+    "would",
+    "will",
+    "has",
+    "have",
+    "had",
+    "do",
+    "does",
+    "did",
+    "just",
+    "into",
+    "out",
+    "over",
+    "under",
+    "also",
+    "up",
+    "down",
+    "some",
+    "most",
+    "many",
+    "very",
+    "you",
+    "needs",
+    "including",
+    "years",
+    "what",
+    "skills",
+    "ability",
+  ]);
+
   const countWords = () => {
     const words = text
       .toLowerCase()
-      .replace(/[^\w\s]/gi, "")
+      .replace(/[^\w\s]/gi, "") // Remove punctuation
       .split(/\s+/);
 
     const frequency = words.reduce((acc, word) => {
-      if (word) {
+      if (word && !stopwords.has(word)) {
+        // Exclude stopwords
         acc[word] = (acc[word] || 0) + 1;
       }
       return acc;
     }, {});
 
-    const sortedWords = Object.entries(frequency)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 20); // Get the top 20 most common words
+    const sortedWords = Object.entries(frequency).sort((a, b) => b[1] - a[1]);
+    // .slice(0, 20); // Get the top 20 most common words
 
     setWordCounts(sortedWords);
   };
